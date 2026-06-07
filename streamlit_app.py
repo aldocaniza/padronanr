@@ -80,36 +80,6 @@ html, body, [class*="css"] {{
     text-transform: uppercase;
 }}
 
-/* ── step cards ── */
-.step-row {{
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    background: white;
-    border-left: 5px solid {PRIMARY};
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-}}
-.step-num {{
-    background: {PRIMARY};
-    color: white;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 1.3rem;
-    border-radius: 50%;
-    width: 40px; height: 40px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-}}
-.step-text {{
-    font-size: 0.93rem;
-    line-height: 1.55;
-}}
-.step-text strong {{ color: {PRIMARY}; }}
-.highlight-orange {{ color: {ACCENT}; font-weight: 700; }}
-
 /* ── search box ── */
 .stTextInput > div > div > input {{
     border: 2px solid {PRIMARY} !important;
@@ -289,23 +259,6 @@ class ANRLookup:
             'Orden':         data.get('orden', ''),
         }
 
-# ── helpers ───────────────────────────────────────────────────────────────────
-def field(label, value):
-    st.markdown(
-        f'<div class="field-label">{label}</div>'
-        f'<div class="field-value">{value}</div>',
-        unsafe_allow_html=True
-    )
-
-def step_card(num, html):
-    st.markdown(
-        f'<div class="step-row">'
-        f'  <div class="step-num">{num}</div>'
-        f'  <div class="step-text">{html}</div>'
-        f'</div>',
-        unsafe_allow_html=True
-    )
-
 # ── main ──────────────────────────────────────────────────────────────────────
 def main():
     st.set_page_config(
@@ -354,6 +307,9 @@ def main():
         with st.spinner("Cargando datos de referencia…"):
             st.session_state.lookup.load_location_data()
 
+    if 'resultado' not in st.session_state:
+        st.session_state.resultado = None
+
     lookup = st.session_state.lookup
 
     cedula_input = st.text_input(
@@ -363,54 +319,56 @@ def main():
         key="cedula_input"
     )
 
-    if st.button("🔍  Consultar padrón"):
+    col_btn, _ = st.columns([1, 2])
+    with col_btn:
+        buscar = st.button("🔍  Consultar padrón", use_container_width=True)
+
+    if buscar:
         if cedula_input:
             with st.spinner("Buscando…"):
                 success, data, error = lookup.buscar_por_cedula(cedula_input)
-
             if success and data:
-                r = lookup.formatear_resultado(data)
-                st.success("✅ Afiliado encontrado en el padrón")
-                st.markdown('<div class="result-card">', unsafe_allow_html=True)
-
-                c1, c2 = st.columns(2)
-                with c1:
-                    field("Cédula",    r['Cédula'])
-                    field("Nombres",   r['Nombres'])
-                    field("Apellidos", r['Apellidos'])
-                    field("Nacimiento",r['Nacimiento'])
-                with c2:
-                    field("Departamento", r['Departamento'])
-                    field("Distrito",     r['Distrito'])
-                    field("Seccional",    r['Seccional'])
-                    field("Local",        r['Local'])
-
-                col_m, col_o = st.columns(2)
-                with col_m:
-                    field("Mesa",  r['Mesa'])
-                with col_o:
-                    field("Orden", r['Orden'])
-
-                st.markdown('</div>', unsafe_allow_html=True)
-
-                # reminder after result
-                st.markdown(f"""
-                <div style="background:linear-gradient(135deg,{PRIMARY},{ACCENT});
-                                color:white;border-radius:12px;padding:16px 20px;
-                                margin-top:16px;text-align:center;">
-                    <div style="font-family:'Montserrat',sans-serif;font-weight:900;
-                                font-size:1.1rem;margin-bottom:4px;">
-                        ¡No olvidés votar Lista 2P · Opción 4!
-                    </div>
-                    <div style="font-size:0.9rem;opacity:.92;">
-                        <strong>Marce Centurión</strong> — Concejal por Asunción
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
+                st.session_state.resultado = lookup.formatear_resultado(data)
             else:
+                st.session_state.resultado = None
                 st.error(f"❌ {error}")
         else:
             st.warning("⚠️ Por favor ingresá un número de cédula")
+
+    r = st.session_state.resultado
+
+    st.markdown(
+        f'<div class="result-card">'
+        f'  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;">'
+        f'    <div><div class="field-label">Cédula</div><div class="field-value">{r["Cédula"] if r else "—"}</div></div>'
+        f'    <div><div class="field-label">Nombres</div><div class="field-value">{r["Nombres"] if r else "—"}</div></div>'
+        f'    <div><div class="field-label">Apellidos</div><div class="field-value">{r["Apellidos"] if r else "—"}</div></div>'
+        f'    <div><div class="field-label">Nacimiento</div><div class="field-value">{r["Nacimiento"] if r else "—"}</div></div>'
+        f'    <div><div class="field-label">Departamento</div><div class="field-value">{r["Departamento"] if r else "—"}</div></div>'
+        f'    <div><div class="field-label">Distrito</div><div class="field-value">{r["Distrito"] if r else "—"}</div></div>'
+        f'    <div><div class="field-label">Seccional</div><div class="field-value">{r["Seccional"] if r else "—"}</div></div>'
+        f'    <div><div class="field-label">Local</div><div class="field-value">{r["Local"] if r else "—"}</div></div>'
+        f'    <div><div class="field-label">Mesa</div><div class="field-value">{r["Mesa"] if r else "—"}</div></div>'
+        f'    <div><div class="field-label">Orden</div><div class="field-value">{r["Orden"] if r else "—"}</div></div>'
+        f'  </div>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
+
+    if r:
+        st.markdown(f"""
+        <div style="background:linear-gradient(135deg,{PRIMARY},{ACCENT});
+                    color:white;border-radius:12px;padding:16px 20px;
+                    margin-top:16px;text-align:center;">
+            <div style="font-family:'Montserrat',sans-serif;font-weight:900;
+                        font-size:1.1rem;margin-bottom:4px;">
+                ¡No olvidés votar Lista 2P · Opción 4!
+            </div>
+            <div style="font-size:0.9rem;opacity:.92;">
+                <strong>Marce Centurión</strong> — Concejal por Asunción
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 

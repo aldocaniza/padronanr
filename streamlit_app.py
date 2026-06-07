@@ -314,7 +314,7 @@ def main():
 
     cedula_input = st.text_input(
         "Número de cédula de identidad",
-        placeholder="Ej: 4568521",
+        placeholder="Ej: 4568XXX",
         label_visibility="collapsed",
         key="cedula_input"
     )

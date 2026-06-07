@@ -420,23 +420,29 @@ def main():
             img_path = f"img/{i}.jpg"
             st.image(img_path, width=700)
             st.caption(f"**Paso {i}**")
-        st.markdown("""
-        <div style="background:#FFF3CD;border-left:4px solid #E67E22;border-radius:8px;
-                        padding:12px 16px;margin-top:12px;font-size:0.88rem;color:#7B4800;">
-            <strong>Recordá:</strong> Podés votar por lista distinta para Intendente y para Concejales.
-            No tenés que votar a la misma lista en ambas categorías.
-        </div>
-        """, unsafe_allow_html=True)
 
     # ── DISCLAIMER ─────────────────────────────────────────────────────────────
     st.markdown("""
     <div style="background:#FEF3E2;border:1px solid #E89F4A;border-radius:10px;
                 padding:12px 16px;margin-top:20px;font-size:0.82rem;color:#7B4800;">
-        <strong>⚠️ Aviso legal</strong><br>
-        Los datos provienen del sitio público <a href="https://www.anr.org.py" target="_blank">www.anr.org.py</a>.
-        Esta herramienta es de carácter informativo particular, sin vínculo oficial con la ANR ni con
-        organismos electorales. No almacena ni re-publica datos personales — cada consulta se realiza
-        en vivo contra el servidor de la ANR. Contenido con fines de campaña política (Lista 2P · Opción 4).
+        <strong>⚠️ Aviso legal</strong><br><br>
+        <strong>Naturaleza privada:</strong> Esta es una aplicación de carácter privado y particular,
+        desarrollada con fines informativos. No tiene vínculo oficial con la ANR, el TSJE ni ningún
+        organismo electoral.<br><br>
+        <strong>Responsabilidad del usuario:</strong> El uso de esta herramienta es bajo
+        exclusiva responsabilidad del usuario. El desarrollador no se hace responsable por el uso
+        que terceros puedan darle a la información aquí consultada, ni por decisiones tomadas en
+        base a ella.<br><br>
+        <strong>Datos:</strong> La información proviene del sitio público
+        <a href="https://www.anr.org.py" target="_blank">www.anr.org.py</a>.
+        Esta aplicación no almacena ni re-publica datos personales — cada consulta se realiza
+        en vivo contra los servidores de la ANR.<br><br>
+        <strong>Contenido político:</strong> Esta aplicación contiene propaganda política
+        (Lista 2P · Opción 4 — Marce Centurión). El día de la elección, desde las 0 hs,
+        está prohibida la difusión de propaganda electoral (Ley N° 834/96 y modificaciones).
+        Esta herramienta debe utilizarse exclusivamente antes del inicio de la veda electoral.<br><br>
+        <strong>Recordá:</strong> Podés votar por lista distinta para Intendente y para Concejales.
+        No tenés que votar a la misma lista en ambas categorías.
     </div>
     """, unsafe_allow_html=True)
 

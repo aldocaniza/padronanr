@@ -428,6 +428,18 @@ def main():
         </div>
         """, unsafe_allow_html=True)
 
+    # ── DISCLAIMER ─────────────────────────────────────────────────────────────
+    st.markdown("""
+    <div style="background:#FEF3E2;border:1px solid #E89F4A;border-radius:10px;
+                padding:12px 16px;margin-top:20px;font-size:0.82rem;color:#7B4800;">
+        <strong>⚠️ Aviso legal</strong><br>
+        Los datos provienen del sitio público <a href="https://www.anr.org.py" target="_blank">www.anr.org.py</a>.
+        Esta herramienta es de carácter informativo particular, sin vínculo oficial con la ANR ni con
+        organismos electorales. No almacena ni re-publica datos personales — cada consulta se realiza
+        en vivo contra el servidor de la ANR. Contenido con fines de campaña política (Lista 2P · Opción 4).
+    </div>
+    """, unsafe_allow_html=True)
+
     # ── FOOTER ────────────────────────────────────────────────────────────────
     st.markdown("""
     <div class="footer">
